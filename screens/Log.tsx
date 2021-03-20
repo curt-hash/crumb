@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button, Text, View } from 'react-native';
 
-export default class Log extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Log</Text>
-        <Button
-          title="Entry"
-          onPress={() => this.props.navigation.navigate("Entry")}
-        />
-      </View>
-    );
-  }
-}
+export default Log = props => {
+  const {
+    navigation: { navigate },
+  } = props;
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Log</Text>
+      <Button title="Entry" onPress={() => navigate('Entry')} />
+    </View>
+  );
+};

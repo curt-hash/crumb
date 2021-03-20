@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
 
-export default class RecipeCreate extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Create a new recipe</Text>
-      </View>
-    );
-  }
-}
+export default RecipeCreate = () => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Create a new recipe</Text>
+    </View>
+  );
+};
