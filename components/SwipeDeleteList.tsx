@@ -2,6 +2,7 @@ import React from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import * as Haptics from 'expo-haptics';
 
 const AnimatedIconButton = Animated.createAnimatedComponent(IconButton);
 
@@ -22,6 +23,11 @@ const styles = StyleSheet.create({
 });
 
 const renderSwipeable = ({ key, value, deleteItem }): JSX.Element => {
+  const deleteFunc = () => {
+    deleteItem(key);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  };
+
   const renderRightActions = (progress, dragX) => {
     dragX.interpolate({
       inputRange: [-80, 0],
@@ -34,7 +40,7 @@ const renderSwipeable = ({ key, value, deleteItem }): JSX.Element => {
         <AnimatedIconButton
           icon="trash-can"
           color="#fff"
-          onPress={() => deleteItem(key)}
+          onPress={deleteFunc}
           style={styles.actionIcon}
         />
       </View>
@@ -47,7 +53,7 @@ const renderSwipeable = ({ key, value, deleteItem }): JSX.Element => {
       rightThreshold={121}
       renderRightActions={renderRightActions}
       overshootFriction={8}
-      onSwipeableRightOpen={() => deleteItem(key)}
+      onSwipeableRightOpen={deleteFunc}
       key={key}
     >
       {value}
