@@ -1,33 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {
-  StackNavigationProp,
-  StackNavigationOptions,
-} from '@react-navigation/stack';
-
-import { StackParamList } from './RecipesStack';
-
-type RecipesScreenNavigationProp = StackNavigationProp<
-  StackParamList,
-  'Recipes'
->;
-type Props = { navigation: RecipesScreenNavigationProp };
-
-export const stackNavigationOptions = ({
-  navigation,
-}: Props): StackNavigationOptions => ({
-  title: 'Recipes',
-  headerRight: () => (
-    <FontAwesome5.Button
-      name="plus"
-      backgroundColor={EStyleSheet.value('$bgColor')}
-      color={EStyleSheet.value('$primaryAccentColor')}
-      onPress={() => navigation.navigate('RecipeCreate')}
-    />
-  ),
-});
+import { Appbar } from 'react-native-paper';
+import { StackHeaderProps } from '@react-navigation/stack';
 
 const styles = EStyleSheet.create({
   container: {
@@ -36,6 +11,23 @@ const styles = EStyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export const RecipesAppbar = ({
+  previous,
+  navigation,
+}: StackHeaderProps): JSX.Element => {
+  return (
+    <Appbar.Header>
+      {previous ? <Appbar.BackActions onPress={navigation.goBack} /> : null}
+      <Appbar.Content title="Manage your recipes" />
+      <Appbar.Action
+        icon="text-box-plus-outline"
+        onPress={() => navigation.navigate('RecipeCreate')}
+        size={28}
+      />
+    </Appbar.Header>
+  );
+};
 
 export const Recipes = (): JSX.Element => {
   return (
@@ -46,6 +38,6 @@ export const Recipes = (): JSX.Element => {
 };
 
 export default {
-  stackNavigationOptions,
   Recipes,
+  RecipesAppbar,
 };

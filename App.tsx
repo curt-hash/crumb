@@ -1,58 +1,84 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
-import EStyleSheet from 'react-native-extended-stylesheet';
+import { OverflowMenuProvider } from 'react-navigation-header-buttons';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 import RecipesStack from './screens/RecipesStack';
 import BakesStack from './screens/BakesStack';
 import LogStack from './screens/LogStack';
 import SettingsStack from './screens/SettingsStack';
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#cc5500',
+    accent: 'grey',
+  },
+};
 
 export default App = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => {
-            switch (route.name) {
-              case 'Recipes': {
-                return <Entypo name="add-to-list" size={size} color={color} />;
-              }
-              case 'Bakes': {
-                return (
-                  <FontAwesome5 name="bread-slice" size={size} color={color} />
-                );
-              }
-              case 'Log': {
-                return <FontAwesome5 name="book" size={size} color={color} />;
-              }
-              case 'Settings': {
-                return <FontAwesome5 name="cog" size={size} color={color} />;
-              }
-              default: {
-                throw new Error(`unhandled route name: ${route.name}`);
-              }
-            }
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: EStyleSheet.value('$primaryAccentColor'),
-          inactiveTintColor: 'gray',
-        }}
-      >
-        <Tab.Screen name="Recipes" component={RecipesStack} />
-        <Tab.Screen name="Bakes" component={BakesStack} />
-        <Tab.Screen name="Log" component={LogStack} />
-        <Tab.Screen name="Settings" component={SettingsStack} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <PaperProvider theme={theme}>
+      <NavigationContainer>
+        <OverflowMenuProvider>
+          <Tab.Navigator
+            initialRouteName="Recipes"
+            shifting={false}
+            labeled
+            activeColor={theme.colors.primary}
+            inactiveColor={theme.colors.accent}
+            barStyle={{
+              backgroundColor: theme.colors.background,
+            }}
+          >
+            <Tab.Screen
+              name="Recipes"
+              component={RecipesStack}
+              options={{
+                tabBarLabel: 'Recipes',
+                tabBarIcon: ({ color }) => (
+                  <Entypo name="add-to-list" color={color} size={21} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Bakes"
+              component={BakesStack}
+              options={{
+                tabBarLabel: 'Bakes',
+                tabBarIcon: ({ color }) => (
+                  <FontAwesome5 name="bread-slice" color={color} size={21} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Log"
+              component={LogStack}
+              options={{
+                tabBarLabel: 'Log',
+                tabBarIcon: ({ color }) => (
+                  <FontAwesome5 name="book" color={color} size={21} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Settings"
+              component={SettingsStack}
+              options={{
+                tabBarLabel: 'Settings',
+                tabBarIcon: ({ color }) => (
+                  <FontAwesome5 name="cog" color={color} size={21} />
+                ),
+              }}
+            />
+          </Tab.Navigator>
+        </OverflowMenuProvider>
+      </NavigationContainer>
+    </PaperProvider>
   );
 };
-
-EStyleSheet.build({
-  $bgColor: '#fff',
-  $primaryAccentColor: '#cc5500',
-});
