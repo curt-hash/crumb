@@ -1,11 +1,17 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { StackScreenProps } from '@react-navigation/stack';
 
-export default Settings = ({ navigation }) => {
+import { StackParamList } from './SettingsStack';
+
+type Props = StackScreenProps<StackParamList, 'Settings'>;
+
+const Settings: React.FC<Props> = () => {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Settings</Text>
-      <Button title="Setting" onPress={() => navigation.navigate('Setting')} />
     </View>
   );
 };
+
+export default Settings;

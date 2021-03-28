@@ -3,24 +3,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Recipes from './Recipes';
 import RecipeCreate from './RecipeCreate';
-import RecipeEditLabels from './RecipeEditLabels';
 
 export type StackParamList = {
   Recipes: undefined;
   RecipeCreate: undefined;
-  RecipeEditLabels: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
 
-export default RecipesStack = () => {
+const RecipesStack: React.FC = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="Recipes"
-      screenOptions={{
-        headerMode: 'screen',
-      }}
-    >
+    <Stack.Navigator initialRouteName="Recipes" headerMode="screen">
       <Stack.Screen
         name="Recipes"
         component={Recipes.Recipes}
@@ -35,13 +28,8 @@ export default RecipesStack = () => {
           header: RecipeCreate.RecipeCreateAppbar,
         }}
       />
-      <Stack.Screen
-        name="RecipeEditLabels"
-        component={RecipeEditLabels.RecipeEditLabels}
-        options={{
-          header: RecipeEditLabels.RecipeEditLabelsAppbar,
-        }}
-      />
     </Stack.Navigator>
   );
 };
+
+export default RecipesStack;

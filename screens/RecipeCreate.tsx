@@ -1,38 +1,50 @@
 import React from 'react';
-import { Pressable, View, StyleSheet, Keyboard } from 'react-native';
-import {
-  Card,
-  TextInput,
-  Appbar,
-  useTheme,
-  Chip,
-  Button,
-} from 'react-native-paper';
+import { Text, ScrollView, StyleSheet } from 'react-native';
+import { Card, TextInput, Appbar, Title, List } from 'react-native-paper';
 import { StackHeaderProps, StackScreenProps } from '@react-navigation/stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+import ChipList from '../components/ChipList';
 
 import { StackParamList } from './RecipesStack';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 8,
+  },
+  title: {
+    textTransform: 'uppercase',
+    paddingLeft: 5,
+    color: '#373737',
+    fontSize: 14,
   },
   card: {
+    borderRadius: 0,
     marginBottom: 10,
-  },
-  chips: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  chip: {
-    margin: 3,
   },
 });
 
-export const RecipeCreateAppbar = ({
+const Tab = createMaterialTopTabNavigator();
+const Test = () => {
+  return (
+    <Card style={styles.card}>
+      <Card.Content>
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>Content</Text>
+      </Card.Content>
+    </Card>
+  );
+};
+
+export const RecipeCreateAppbar: React.FC<StackHeaderProps> = ({
   previous,
   navigation,
-}: StackHeaderProps): JSX.Element => {
+}) => {
   return (
     <Appbar.Header>
       {previous ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
@@ -43,12 +55,19 @@ export const RecipeCreateAppbar = ({
 
 type Props = StackScreenProps<StackParamList, 'RecipeCreate'>;
 
-export const RecipeCreate = ({ navigation }: Props): JSX.Element => {
-  const { colors } = useTheme();
+export const RecipeCreate: React.FC<Props> = () => {
   const [name, setName] = React.useState('');
   const [desc, setDesc] = React.useState('');
+  const [labels, setLabels] = React.useState([
+    'Sourdough',
+    'High hydration',
+    'Whole wheat',
+  ]);
+  const removeLabel = (key: string) => {
+    setLabels(labels.filter(label => label !== key));
+  };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Card style={styles.card}>
         <Card.Content>
           <TextInput
@@ -57,6 +76,7 @@ export const RecipeCreate = ({ navigation }: Props): JSX.Element => {
             mode="outlined"
             value={name}
             onChangeText={v => setName(v)}
+            dense
           />
           <TextInput
             label="Description"
@@ -65,35 +85,43 @@ export const RecipeCreate = ({ navigation }: Props): JSX.Element => {
             onChangeText={v => setDesc(v)}
             multiline
             blurOnSubmit
+            dense
           />
         </Card.Content>
       </Card>
+      <Title style={styles.title}>Labels</Title>
       <Card style={styles.card}>
-        <Card.Title title="Labels" />
-        <Card.Content style={styles.chips}>
-          <Chip style={styles.chip} onClose={() => console.log('close')}>
-            Sourdough
-          </Chip>
-          <Chip style={styles.chip} onClose={() => console.log('close')}>
-            High hydration
-          </Chip>
-          <Chip style={styles.chip} onClose={() => console.log('close')}>
-            Whole wheat
-          </Chip>
-          <Chip
-            style={styles.chip}
-            onPress={() => console.log('add')}
-            icon="plus"
-          >
-            Add label
-          </Chip>
+        <Card.Content>
+          <ChipList
+            items={labels.map(label => ({
+              key: label,
+              value: label,
+              closeFunc: removeLabel,
+            }))}
+            addButtonText="Add label"
+          />
         </Card.Content>
       </Card>
-      <Card style={styles.card}>
-        <Card.Title title="Ingredients" />
-        <Card.Content />
-      </Card>
-    </View>
+      <Title style={styles.title}>Ingredients</Title>
+      <Tab.Navigator>
+        <Tab.Screen name="All" component={Test} />
+        <Tab.Screen name="Starter" component={Test} />
+        <Tab.Screen name="Poolish" component={Test} />
+        <Tab.Screen name="Dough" component={Test} />
+      </Tab.Navigator>
+      <Title style={styles.title}>Steps</Title>
+      <List.AccordionGroup>
+        <List.Accordion title="Levain Build" id="1">
+          <List.Item title="Item 1" />
+        </List.Accordion>
+        <List.Accordion title="Autolyse" id="2">
+          <List.Item title="Item 1" />
+        </List.Accordion>
+        <List.Accordion title="Mix" id="3">
+          <List.Item title="Item 1" />
+        </List.Accordion>
+      </List.AccordionGroup>
+    </ScrollView>
   );
 };
 

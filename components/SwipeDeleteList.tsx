@@ -22,13 +22,22 @@ const styles = StyleSheet.create({
   },
 });
 
-const renderSwipeable = ({ key, value, deleteItem }): JSX.Element => {
-  const deleteFunc = () => {
-    deleteItem(key);
+interface Item {
+  key: string;
+  value: string;
+  deleteFunc: (key: string, value: string) => void;
+}
+
+const renderSwipeable: React.FC<Item> = ({ key, value, deleteFunc }) => {
+  const deleteFuncWrapper = () => {
+    deleteFunc(key, value);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
 
-  const renderRightActions = (progress, dragX) => {
+  const renderRightActions = (
+    progress: Animated.AnimatedInterpolation,
+    dragX: Animated.AnimatedInterpolation,
+  ): React.ReactNode => {
     dragX.interpolate({
       inputRange: [-80, 0],
       outputRange: [1, 0],
@@ -40,7 +49,7 @@ const renderSwipeable = ({ key, value, deleteItem }): JSX.Element => {
         <AnimatedIconButton
           icon="trash-can"
           color="#fff"
-          onPress={deleteFunc}
+          onPress={deleteFuncWrapper}
           style={styles.actionIcon}
         />
       </View>
@@ -53,7 +62,7 @@ const renderSwipeable = ({ key, value, deleteItem }): JSX.Element => {
       rightThreshold={121}
       renderRightActions={renderRightActions}
       overshootFriction={8}
-      onSwipeableRightOpen={deleteFunc}
+      onSwipeableRightOpen={deleteFuncWrapper}
       key={key}
     >
       {value}
@@ -61,19 +70,13 @@ const renderSwipeable = ({ key, value, deleteItem }): JSX.Element => {
   );
 };
 
-export default SwipeDeleteList = ({
-  items,
-  renderItem,
-  deleteItem,
-}): JSX.Element => {
-  return (
-    <View>
-      {items.map(item =>
-        renderSwipeable({
-          ...renderItem(item),
-          deleteItem,
-        }),
-      )}
-    </View>
-  );
+export interface Props {
+  items: any[];
+  renderFunc: (item: any) => Item;
+}
+
+const SwipeDeleteList: React.FC<Props> = ({ items, renderFunc }) => {
+  return <View>{items.map(item => renderSwipeable(renderFunc(item)))}</View>;
 };
+
+export default SwipeDeleteList;

@@ -3,12 +3,18 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Log from './Log';
 
-const Stack = createStackNavigator();
+export type StackParamList = {
+  Log: undefined;
+};
 
-export default LogStack = () => {
+const Stack = createStackNavigator<StackParamList>();
+
+const LogStack: React.FC = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Log" component={Log} />
     </Stack.Navigator>
   );
 };
+
+export default LogStack;

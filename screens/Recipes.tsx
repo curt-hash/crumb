@@ -2,7 +2,9 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Appbar } from 'react-native-paper';
-import { StackHeaderProps } from '@react-navigation/stack';
+import { StackHeaderProps, StackScreenProps } from '@react-navigation/stack';
+
+import { StackParamList } from './RecipesStack';
 
 const styles = EStyleSheet.create({
   container: {
@@ -12,13 +14,13 @@ const styles = EStyleSheet.create({
   },
 });
 
-export const RecipesAppbar = ({
+export const RecipesAppbar: React.FC<StackHeaderProps> = ({
   previous,
   navigation,
-}: StackHeaderProps): JSX.Element => {
+}) => {
   return (
     <Appbar.Header>
-      {previous ? <Appbar.BackActions onPress={navigation.goBack} /> : null}
+      {previous ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
       <Appbar.Content title="Manage your recipes" />
       <Appbar.Action
         icon="text-box-plus-outline"
@@ -29,7 +31,9 @@ export const RecipesAppbar = ({
   );
 };
 
-export const Recipes = (): JSX.Element => {
+type Props = StackScreenProps<StackParamList, 'Recipes'>;
+
+export const Recipes: React.FC<Props> = () => {
   return (
     <View style={styles.container}>
       <Text>Recipes and whatnot</Text>

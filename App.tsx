@@ -21,7 +21,7 @@ const theme = {
   },
 };
 
-export default App = () => {
+const App: React.FC = () => {
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer>
@@ -82,3 +82,5 @@ export default App = () => {
     </PaperProvider>
   );
 };
+
+export default App;

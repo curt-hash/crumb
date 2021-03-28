@@ -1,14 +1,17 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { StackScreenProps } from '@react-navigation/stack';
 
-export default Log = props => {
-  const {
-    navigation: { navigate },
-  } = props;
+import { StackParamList } from './LogStack';
+
+type Props = StackScreenProps<StackParamList, 'Log'>;
+
+const Log: React.FC<Props> = () => {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Log</Text>
-      <Button title="Entry" onPress={() => navigate('Entry')} />
     </View>
   );
 };
+
+export default Log;

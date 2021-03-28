@@ -3,12 +3,18 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Settings from './Settings';
 
-const Stack = createStackNavigator();
+export type StackParamList = {
+  Settings: undefined;
+};
 
-export default SettingsStack = () => {
+const Stack = createStackNavigator<StackParamList>();
+
+const SettingsStack: React.FC = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Settings" component={Settings} />
     </Stack.Navigator>
   );
 };
+
+export default SettingsStack;
