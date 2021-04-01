@@ -22,15 +22,13 @@ const styles = StyleSheet.create({
   },
 });
 
-interface Item {
-  key: string;
-  value: string;
-  deleteFunc: (key: string, value: string) => void;
+interface SwipeDeleteProps {
+  deleteItem: () => void;
 }
 
-const renderSwipeable: React.FC<Item> = ({ key, value, deleteFunc }) => {
+const SwipeDelete: React.FC<SwipeDeleteProps> = ({ deleteItem, children }) => {
   const deleteFuncWrapper = () => {
-    deleteFunc(key, value);
+    deleteItem();
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
 
@@ -63,20 +61,37 @@ const renderSwipeable: React.FC<Item> = ({ key, value, deleteFunc }) => {
       renderRightActions={renderRightActions}
       overshootFriction={8}
       onSwipeableRightOpen={deleteFuncWrapper}
-      key={key}
     >
-      {value}
+      {children}
     </Swipeable>
   );
 };
 
 export interface Props {
   items: any[];
-  renderFunc: (item: any) => Item;
+  keyItem: (item: any) => string;
+  renderItem: (item: any) => React.ReactNode;
+  deleteItem: (key: string) => void;
 }
 
-const SwipeDeleteList: React.FC<Props> = ({ items, renderFunc }) => {
-  return <View>{items.map(item => renderSwipeable(renderFunc(item)))}</View>;
+const SwipeDeleteList: React.FC<Props> = ({
+  items,
+  keyItem,
+  renderItem,
+  deleteItem,
+}) => {
+  return (
+    <View>
+      {items.map(item => {
+        const key = keyItem(item);
+        return (
+          <SwipeDelete key={key} deleteItem={() => deleteItem(key)}>
+            {renderItem(item)}
+          </SwipeDelete>
+        );
+      })}
+    </View>
+  );
 };
 
 export default SwipeDeleteList;

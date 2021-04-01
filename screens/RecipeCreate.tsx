@@ -1,10 +1,11 @@
 import React from 'react';
-import { Text, ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { Card, TextInput, Appbar, Title, List } from 'react-native-paper';
 import { StackHeaderProps, StackScreenProps } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import ChipList from '../components/ChipList';
+import IngredientsTable from '../components/IngredientsTable';
 
 import { StackParamList } from './RecipesStack';
 
@@ -25,21 +26,6 @@ const styles = StyleSheet.create({
 });
 
 const Tab = createMaterialTopTabNavigator();
-const Test = () => {
-  return (
-    <Card style={styles.card}>
-      <Card.Content>
-        <Text>Content</Text>
-        <Text>Content</Text>
-        <Text>Content</Text>
-        <Text>Content</Text>
-        <Text>Content</Text>
-        <Text>Content</Text>
-        <Text>Content</Text>
-      </Card.Content>
-    </Card>
-  );
-};
 
 export const RecipeCreateAppbar: React.FC<StackHeaderProps> = ({
   previous,
@@ -55,7 +41,7 @@ export const RecipeCreateAppbar: React.FC<StackHeaderProps> = ({
 
 type Props = StackScreenProps<StackParamList, 'RecipeCreate'>;
 
-export const RecipeCreate: React.FC<Props> = () => {
+export const RecipeCreate: React.FC<Props> = ({ navigation }) => {
   const [name, setName] = React.useState('');
   const [desc, setDesc] = React.useState('');
   const [labels, setLabels] = React.useState([
@@ -65,6 +51,9 @@ export const RecipeCreate: React.FC<Props> = () => {
   ]);
   const removeLabel = (key: string) => {
     setLabels(labels.filter(label => label !== key));
+  };
+  const addLabel = () => {
+    navigation.navigate('RecipeEditLabels');
   };
   return (
     <ScrollView style={styles.container}>
@@ -89,6 +78,7 @@ export const RecipeCreate: React.FC<Props> = () => {
           />
         </Card.Content>
       </Card>
+
       <Title style={styles.title}>Labels</Title>
       <Card style={styles.card}>
         <Card.Content>
@@ -99,16 +89,19 @@ export const RecipeCreate: React.FC<Props> = () => {
               closeFunc: removeLabel,
             }))}
             addButtonText="Add label"
+            addFunc={addLabel}
           />
         </Card.Content>
       </Card>
+
       <Title style={styles.title}>Ingredients</Title>
-      <Tab.Navigator>
-        <Tab.Screen name="All" component={Test} />
-        <Tab.Screen name="Starter" component={Test} />
-        <Tab.Screen name="Poolish" component={Test} />
-        <Tab.Screen name="Dough" component={Test} />
+      <Tab.Navigator style={{ marginBottom: 10 }}>
+        <Tab.Screen name="All" component={IngredientsTable} />
+        <Tab.Screen name="Starter" component={IngredientsTable} />
+        <Tab.Screen name="Poolish" component={IngredientsTable} />
+        <Tab.Screen name="Dough" component={IngredientsTable} />
       </Tab.Navigator>
+
       <Title style={styles.title}>Steps</Title>
       <List.AccordionGroup>
         <List.Accordion title="Levain Build" id="1">

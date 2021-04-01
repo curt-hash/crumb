@@ -29,13 +29,14 @@ const renderChip: React.FC<Item> = ({ key, value, closeFunc }) => {
 export interface Props {
   items: Item[];
   addButtonText: string;
+  addFunc: () => void;
 }
 
-const ChipList: React.FC<Props> = ({ items, addButtonText }) => {
+const ChipList: React.FC<Props> = ({ items, addButtonText, addFunc }) => {
   return (
     <View style={styles.container}>
       {items.map(renderChip)}
-      <Chip style={styles.chip} onPress={() => console.log('add')} icon="plus">
+      <Chip style={styles.chip} onPress={addFunc} icon="plus">
         {addButtonText}
       </Chip>
     </View>
