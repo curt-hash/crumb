@@ -1,5 +1,8 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackHeaderProps,
+} from '@react-navigation/stack';
 
 import Recipes from './Recipes';
 import RecipeCreate from './RecipeCreate';
@@ -14,6 +17,15 @@ export type StackParamList = {
 const Stack = createStackNavigator<StackParamList>();
 
 const RecipesStack: React.FC = () => {
+  const [showAddModal, setShowAddModal] = React.useState(false);
+  const editLabelsAppbar = (props: StackHeaderProps) => {
+    return (
+      <RecipeEditLabels.RecipeEditLabelsAppbar
+        {...props}
+        onPressPlus={() => setShowAddModal(true)}
+      />
+    );
+  };
   return (
     <Stack.Navigator initialRouteName="Recipes" headerMode="screen">
       <Stack.Screen
@@ -32,11 +44,20 @@ const RecipesStack: React.FC = () => {
       />
       <Stack.Screen
         name="RecipeEditLabels"
-        component={RecipeEditLabels.RecipeEditLabels}
         options={{
-          header: RecipeEditLabels.RecipeEditLabelsAppbar,
+          header: editLabelsAppbar,
         }}
-      />
+      >
+        {props => {
+          return (
+            <RecipeEditLabels.RecipeEditLabels
+              {...props}
+              showAddModal={showAddModal}
+              hideAddModal={() => setShowAddModal(false)}
+            />
+          );
+        }}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };

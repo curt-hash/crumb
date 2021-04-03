@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { DataTable, Divider, Subheading } from 'react-native-paper';
+import { DataTable } from 'react-native-paper';
 
 const styles = StyleSheet.create({
   container: {
