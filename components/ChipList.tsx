@@ -12,33 +12,37 @@ const styles = StyleSheet.create({
   },
 });
 
-interface Item {
-  key: string;
-  value: string;
-  closeFunc: (key: string, value: string) => void;
-}
-
-const renderChip: React.FC<Item> = ({ key, value, closeFunc }) => {
-  return (
-    <Chip style={styles.chip} key={key} onClose={() => closeFunc(key, value)}>
-      {value}
-    </Chip>
-  );
-};
-
 export interface Props {
-  items: Item[];
-  addButtonText: string;
-  addFunc: () => void;
+  values: string[];
+  closeFunc?: (value: string) => void;
+  lastChipIcon?: string;
+  lastChipText?: string;
+  lastChipFunc?: () => void;
 }
 
-const ChipList: React.FC<Props> = ({ items, addButtonText, addFunc }) => {
+const ChipList: React.FC<Props> = ({
+  values,
+  closeFunc,
+  lastChipIcon,
+  lastChipText,
+  lastChipFunc,
+}) => {
   return (
     <View style={styles.container}>
-      {items.map(renderChip)}
-      <Chip style={styles.chip} onPress={addFunc} icon="plus">
-        {addButtonText}
-      </Chip>
+      {values.map(value => (
+        <Chip
+          style={styles.chip}
+          key={value}
+          onClose={closeFunc ? () => closeFunc(value) : undefined}
+        >
+          {value}
+        </Chip>
+      ))}
+      {lastChipIcon && lastChipText && lastChipFunc && (
+        <Chip style={styles.chip} onPress={lastChipFunc} icon={lastChipIcon}>
+          {lastChipText}
+        </Chip>
+      )}
     </View>
   );
 };

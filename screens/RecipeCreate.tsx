@@ -49,10 +49,10 @@ export const RecipeCreate: React.FC<Props> = ({ navigation }) => {
     'High hydration',
     'Whole wheat',
   ]);
-  const removeLabel = (key: string) => {
-    setLabels(labels.filter(label => label !== key));
+  const removeLabel = (value: string) => {
+    setLabels(labels.filter(label => label !== value));
   };
-  const addLabel = () => {
+  const editLabels = () => {
     navigation.navigate('RecipeEditLabels');
   };
   return (
@@ -83,13 +83,11 @@ export const RecipeCreate: React.FC<Props> = ({ navigation }) => {
       <Card style={styles.card}>
         <Card.Content>
           <ChipList
-            items={labels.map(label => ({
-              key: label,
-              value: label,
-              closeFunc: removeLabel,
-            }))}
-            addButtonText="Add label"
-            addFunc={addLabel}
+            values={labels}
+            closeFunc={removeLabel}
+            lastChipIcon="playlist-edit"
+            lastChipText="Edit labels"
+            lastChipFunc={editLabels}
           />
         </Card.Content>
       </Card>
