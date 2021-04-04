@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import { StackHeaderProps, StackScreenProps } from '@react-navigation/stack';
+import * as Haptics from 'expo-haptics';
 
 import GetTextDialog from '../components/GetTextDialog';
 import SetSelect, { Item } from '../components/SetSelect';
@@ -38,30 +39,27 @@ export const RecipeEditLabels: React.FC<Props> = ({
   const [labels, setLabels] = React.useState([
     {
       value: 'Sourdough',
-      key: 'sourdough',
       selected: true,
     },
     {
       value: 'High hydration',
-      key: 'high hydration',
       selected: false,
     },
     {
       value: 'Whole wheat',
-      key: 'ww',
       selected: false,
     },
   ]);
-  const removeLabel = (key: string) => {
-    setLabels(labels.filter(item => item.key !== key));
+  const removeLabel = (value: string) => {
+    setLabels(labels.filter(item => item.value !== value));
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
-  const toggleLabel = (toggleKey: string) => {
+  const toggleLabel = (toggleValue: string) => {
     setLabels(
-      labels.map(({ value, key, selected }) => {
+      labels.map(({ value, selected }) => {
         return {
-          key,
           value,
-          selected: key === toggleKey ? !selected : selected,
+          selected: value === toggleValue ? !selected : selected,
         };
       }),
     );
@@ -72,7 +70,6 @@ export const RecipeEditLabels: React.FC<Props> = ({
   const setValue = (v: string) => {
     addLabel({
       value: v,
-      key: v,
       selected: true,
     });
   };

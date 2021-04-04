@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
 
-import SwipeDeleteList from './SwipeDeleteList';
+import SwipeList from './SwipeList';
 
 const styles = StyleSheet.create({
   item: {
@@ -17,43 +17,63 @@ const styles = StyleSheet.create({
   },
 });
 
+interface ItemProps {
+  value: string;
+  selected: boolean;
+  toggleItem: (value: string) => void;
+}
+
+const Item: React.FC<ItemProps> = ({ value, selected, toggleItem }) => {
+  return (
+    <List.Item
+      title={value}
+      titleStyle={styles.title}
+      style={styles.item}
+      onPress={() => toggleItem(value)}
+      right={() =>
+        selected ? <List.Icon style={styles.icon} icon="check" /> : null
+      }
+    />
+  );
+};
+
 export interface Item {
   value: string;
-  key: string;
   selected: boolean;
 }
 
 export interface Props {
   items: Item[];
-  deleteItem: (key: string) => void;
-  toggleItem: (key: string) => void;
+  deleteItem: (value: string) => void;
+  toggleItem: (value: string) => void;
 }
 
 const SetSelect: React.FC<Props> = ({ items, deleteItem, toggleItem }) => {
-  return (
-    <SwipeDeleteList
-      items={items}
-      keyItem={(item: Item) => item.key}
-      renderItem={(item: Item) => {
-        return (
-          <List.Item
-            title={item.value}
-            titleStyle={styles.title}
-            style={styles.item}
-            onPress={() => toggleItem(item.key)}
-            right={() => {
-              if (item.selected) {
-                return <List.Icon style={styles.icon} icon="check" />;
-              }
+  const rendered = items.map(item => {
+    return {
+      node: (
+        <Item
+          value={item.value}
+          selected={item.selected}
+          toggleItem={toggleItem}
+        />
+      ),
+      key: item.value,
+    };
+  });
 
-              return null;
-            }}
-          />
-        );
-      }}
-      deleteItem={deleteItem}
-    />
-  );
+  const actions = [
+    {
+      backgroundColor: 'red',
+      icon: 'trash-can',
+      iconColor: 'white',
+      onPress: (value: string) => {
+        deleteItem(value);
+      },
+    },
+  ];
+
+  return <SwipeList items={rendered} actions={actions} />;
 };
 
 export default SetSelect;
